@@ -31,14 +31,14 @@ app.get('/api', async (req, res) => {
         }
       });
     });
-
-    res.send(rows);
+    console.log(rows);
+    return res.send(rows);
 
     const currentTimestamp2 = moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss.SSS');
     console.log(`Current date and time: ${currentTimestamp2}`);
   } catch (err) {
     console.error(err);
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 });
 
