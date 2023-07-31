@@ -32,38 +32,65 @@ app.get('/api', async (req, res) => {
       });
     });
     console.log(rows);
-    return res.send(rows);
-
     const currentTimestamp2 = moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss.SSS');
     console.log(`Current date and time: ${currentTimestamp2}`);
+    return res.send(rows);
   } catch (err) {
     console.error(err);
     return res.sendStatus(500);
   }
 });
 
+// app.post('/api', async (req, res) => {
+//   try {
+//     const data = req.body;
+//     const currentTimestamp = moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss');
+//     const language = req.query.language;
+//     const Data = [data.id, language, data.operation, currentTimestamp, data.word];
+
+//     await new Promise((resolve, reject) => {
+//       connection.query(`INSERT INTO data_table(id,language,operation,time_stamp,word) VALUES (?)`, [Data], (err, rows) => {
+//         if (err) {
+//           console.log(err);
+//           reject(err);
+//         } else {
+//           resolve(rows);
+//         }
+//       });
+//     });
+
+//     return res.send(Data);
+//   } catch (err) {
+//     console.error(err);
+//     return res.sendStatus(500);
+//   }
+// });
 app.post('/api', async (req, res) => {
   try {
-    const data = req.body;
+    const dataArray = req.body; // Assuming dataArray is an array of objects
+
     const currentTimestamp = moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss');
     const language = req.query.language;
-    const Data = [data.id, language, data.operation, currentTimestamp, data.word];
 
-    await new Promise((resolve, reject) => {
-      connection.query(`INSERT INTO data_table(id,language,operation,time_stamp,word) VALUES (?)`, [Data], (err, rows) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          resolve(rows);
-        }
+    for (const data of dataArray) {
+      const Data = [data.id, language, data.operation, currentTimestamp, data.word];
+
+      await new Promise((resolve, reject) => {
+        connection.query(`INSERT INTO data_table(id, language, operation, time_stamp, word) VALUES (?)`, [Data], (err, rows) => {
+          if (err) {
+            console.log(err);
+            reject(err);
+          } else {
+            resolve(rows);
+          }
+        });
       });
-    });
+    }
 
-    res.send(Data);
+    return res.send(dataArray);
   } catch (err) {
     console.error(err);
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 });
 
