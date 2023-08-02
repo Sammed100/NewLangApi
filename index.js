@@ -40,31 +40,6 @@ app.get('/api', async (req, res) => {
     return res.sendStatus(500);
   }
 });
-
-// app.post('/api', async (req, res) => {
-//   try {
-//     const data = req.body;
-//     const currentTimestamp = moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss');
-//     const language = req.query.language;
-//     const Data = [data.id, language, data.operation, currentTimestamp, data.word];
-
-//     await new Promise((resolve, reject) => {
-//       connection.query(`INSERT INTO data_table(id,language,operation,time_stamp,word) VALUES (?)`, [Data], (err, rows) => {
-//         if (err) {
-//           console.log(err);
-//           reject(err);
-//         } else {
-//           resolve(rows);
-//         }
-//       });
-//     });
-
-//     return res.send(Data);
-//   } catch (err) {
-//     console.error(err);
-//     return res.sendStatus(500);
-//   }
-// });
 app.post('/api', async (req, res) => {
   try {
     const dataArray = req.body; // Assuming dataArray is an array of objects
